@@ -1,5 +1,5 @@
 # C--Style-Events
-C#-Styled Events for C++
+C#-Style Events for C++
 
 ## Lambdas 
 ```cpp
