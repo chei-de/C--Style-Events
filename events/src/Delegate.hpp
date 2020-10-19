@@ -5,18 +5,22 @@
 
 #include "Sequence.hpp"
 
-template<int> // begin with 0 here!
+template<int>
 struct placeholder_template
 {};
 namespace std
 {
     template<int N>
     struct is_placeholder< placeholder_template<N> >
-        : integral_constant<int, N+1> // the one is important
+        : integral_constant<int, N+1> 
     {};
 }
 
-//C#-Style Delegate wrapper for an Event System
+namespace CsEvt
+{
+///<summary>
+///Combines a function of any type with an identifier 
+///</summary>
 template <typename R, typename... ARGS>
 class Delegate
 {
@@ -30,7 +34,6 @@ public:
 
     Delegate(Delegate&& other)
         :instanceId(other.instanceId), func(std::move(other.func)) { }
-
     Delegate<R, ARGS...>& operator=(Delegate<R, ARGS...> const & other)
     {
         if(&other == this)
@@ -80,13 +83,13 @@ public:
     template<class C>
     static Delegate MakeDelegate(C* instance, R (C::*memFunc) (ARGS...))
     {
-        return MakeDelegate_(instance, memFunc, sequence_t<sizeof...(ARGS)>{});
+        return MakeDelegate_(instance, memFunc, CsEvt::sequence_t<sizeof...(ARGS)>{});
     }
 
 private: 
     template<class C, int... indices>
     static Delegate MakeDelegate_(C* instance, R (C::*memFunc) (ARGS...), 
-        sequence<indices...>)
+        CsEvt::sequence<indices...>)
     {
         auto fun = std::bind(memFunc, instance, placeholder_template<indices>{}...);
         return Delegate(fun, instanceCounter++);
@@ -104,11 +107,12 @@ private:
     int instanceId;
     std::function<R (ARGS...)> func;
 };
+}
 
 namespace std {
     template<typename R, typename... ARGS>
-    struct hash<Delegate<R, ARGS...>> {
-        size_t operator() (Delegate<R, ARGS...> const &  dlg) const noexcept
+    struct hash<CsEvt::Delegate<R, ARGS...>> {
+        size_t operator() (CsEvt::Delegate<R, ARGS...> const &  dlg) const noexcept
         {
             return dlg.instanceId;
         }

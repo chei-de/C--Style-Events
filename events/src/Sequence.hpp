@@ -1,6 +1,10 @@
 #pragma once
 
-
+namespace CsEvt
+{
+//Some boiler plate to get the appropriate placeholders 
+// {std::placeholders::_1 ... _N}, when
+// working with object bound functions
 template <int ... Ns> struct sequence {};
 
 template <int ... Ns> struct seq_gen;
@@ -20,3 +24,4 @@ struct seq_gen<0, Ns...>
 
 template <int N>
 using sequence_t = typename seq_gen<N>::type;
+}

@@ -6,6 +6,8 @@
 
 #include "Delegate.hpp"
 
+namespace CsEvt
+{
 template <typename... ARGS>
 class Event
 {
@@ -79,3 +81,4 @@ public:
 private:
     std::vector<EventFunc> listeners;
 };
+}

@@ -4,6 +4,8 @@
 #include <tuple>
 #include "Event.hpp"
 
+using CsEvt::Event;
+
 //Events with lambdas
 TEST(EventTest, EventLambdaWorking)
 {
